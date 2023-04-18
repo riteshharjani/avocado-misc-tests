@@ -228,9 +228,16 @@ class Xfstests(Test):
 
         self.fs_to_test = self.params.get('fs', default='ext4')
 
+        self.args = self.params.get('args', default='-i 2 generic/001')
+        self.log.debug(f"FS: {self.fs_to_test}, args: {self.args}")
+
         self.skip_dangerous = self.params.get('skip_dangerous', default=True)
         self.group = self.params.get('group', default='auto')
         self.test_range = self.params.get('test_range', default=None)
+
+        if (self.skip_dangerous or self.group or self.test_range):
+            self.log.info("These options(skip_dangerous, group, test_range) are deprecated. Use \"args\" instead")
+
         self.base_disk = self.params.get('disk', default=None)
         self.scratch_mnt = self.params.get(
             'scratch_mnt', default='/mnt/scratch')
@@ -419,7 +426,10 @@ class Xfstests(Test):
         self.test_list = self._create_test_list(self.test_range)
         self.log.info("Tests available in srcdir: %s",
                       ", ".join(self.available_tests))
-        if not self.test_range:
+
+        # self.args is sufficient for passing everything to xfstests check.
+        # Hence ignore any other option if args is passed
+        if not self.args and not self.test_range:
             self.exclude = self.params.get('exclude', default=None)
             self.gen_exclude = self.params.get('gen_exclude', default=None)
             self.share_exclude = self.params.get('share_exclude', default=None)
@@ -452,7 +462,16 @@ class Xfstests(Test):
     def test(self):
         failures = False
         os.chdir(self.teststmpdir)
-        if not self.test_list:
+        if self.args:
+            cmd = f"./check {self.args}"
+            result = process.run(cmd, ignore_status=True, verbose=True)
+            if result.exit_status == 0:
+                self.log.info("OK: All tests passed")
+            else:
+                msg = self._parse_error_message(result.stdout)
+                self.log.info("FAIL: Test(s) failed %s" % msg)
+                failures = True
+        elif not self.test_list:
             self.log.info('Running all tests')
             args = ''
             if self.exclude or self.gen_exclude:
