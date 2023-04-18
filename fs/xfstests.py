@@ -520,6 +520,16 @@ class Xfstests(Test):
 
     def _create_fsimages(self, loop_size, i):
         dd_count = int(loop_size.split('GiB')[0])
+        fpath = f"{self.disk_mnt}/file-{i}.img"
+
+        # if file already present of the given size then just continue
+        # Note there is an inherent assumption anyways that the filesize
+        # is given in GiB
+        if (os.path.isfile(fpath) and
+            os.path.getsize(fpath) == (dd_count * 1024 * 1024 * 1024)):
+            self.log.debug("%s already present, continue" % (fpath))
+            return
+
         if self.use_dd:
             process.run('dd if=/dev/zero of=%s/file-%s.img bs=1G count=%s'
                         % (self.disk_mnt, i, dd_count), shell=True,
