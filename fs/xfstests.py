@@ -226,6 +226,8 @@ class Xfstests(Test):
 
         self.__setUp_packages()
 
+        self.fs_to_test = self.params.get('fs', default='ext4')
+
         self.skip_dangerous = self.params.get('skip_dangerous', default=True)
         self.group = self.params.get('group', default='auto')
         self.test_range = self.params.get('test_range', default=None)
@@ -234,7 +236,6 @@ class Xfstests(Test):
             'scratch_mnt', default='/mnt/scratch')
         self.test_mnt = self.params.get('test_mnt', default='/mnt/test')
         self.disk_mnt = self.params.get('disk_mnt', default='/mnt/loop_device')
-        self.fs_to_test = self.params.get('fs', default='ext4')
         self.run_type = self.params.get('run_type', default='distro')
 
         self.devices = []
