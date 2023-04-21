@@ -231,6 +231,10 @@ class Xfstests(Test):
         self.args = self.params.get('args', default='-i 2 generic/001')
         self.log.debug(f"FS: {self.fs_to_test}, args: {self.args}")
 
+        self.sectionname = self.params.get('sectionname', default=self.fs_to_test)
+        if (self.sectionname == self.fs_to_test):
+            self.log.warn(f"No section name present. Results may get overridden for {self.fs_to_test}")
+
         self.skip_dangerous = self.params.get('skip_dangerous', default=True)
         self.group = self.params.get('group', default='auto')
         self.test_range = self.params.get('test_range', default=None)
@@ -501,6 +505,22 @@ class Xfstests(Test):
             self.fail('One or more tests failed. Please check the logs.')
 
     def tearDown(self):
+
+        srcdir = f"{self.teststmpdir}/results"
+        outputpath = f"{self.outputdir}/results-{self.sectionname}"
+
+        job_dir = os.path.dirname(os.path.dirname(self.logdir))
+        self.job_id = os.path.basename(job_dir)
+
+        self.log.debug(" Job ID: %s, logdir: %s, srcdir: %s, outputdir: %s, outputpath: %s" %
+                (self.job_id, self.logdir, srcdir, self.outputdir, outputpath))
+
+        if (os.path.exists(self.outputdir)):
+            shutil.copytree(srcdir, outputpath)
+        else:
+            self.log.info("Unable to copy. Path not found %s -> %s " %
+                          (srcdir, self.outputdir))
+
         user_exits = 0
         if not (process.system('id fsgqa', sudo=True, ignore_status=True)):
             process.system('userdel -r -f fsgqa', sudo=True)
