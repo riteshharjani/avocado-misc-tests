@@ -75,10 +75,9 @@ class Stressng(Test):
                 self.cancel("%s is needed, get the source and build" %
                             package)
 
-        tarball = self.fetch_asset('stressng.zip',
-                                   locations=['https://github.com/Colin'
-                                              'IanKing/stress-ng/archive'
-                                              '/master.zip'], expire='7d')
+        asset_url = 'https://github.com/ColinIanKing/stress-ng/archive/master.zip'
+        tarball = self.fetch_asset('stressng.zip', locations=[asset_url],
+                                   expire='7d')
         archive.extract(tarball, self.workdir)
         sourcedir = os.path.join(self.workdir, 'stress-ng-master')
         os.chdir(sourcedir)
@@ -135,6 +134,9 @@ class Stressng(Test):
             else:
                 cmd = "mkfs.%s -f %s" % (fstype, self.loop_dev)
             process.run(cmd)
+            if (not os.path.exists(f"{mnt}/stressng")):
+                mnt = os.path.join(mnt, "stressng")
+                os.mkdir(mnt)
             process.run("mount %s %s" % (self.loop_dev, mnt))
         if self.aggressive and self.maximize:
             args.append('--aggressive --maximize --oomable ')
