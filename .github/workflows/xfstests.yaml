@@ -3,7 +3,12 @@ name: xfstests
 on:
   push:
     branches:
-      - masterci
+      - '**'
+    paths:
+      - 'fs/xfstests.py'
+  pull_request:
+    branches:
+      - '**'
     paths:
       - 'fs/xfstests.py'
   workflow_dispatch:
