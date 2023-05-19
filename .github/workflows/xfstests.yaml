@@ -17,6 +17,7 @@ jobs:
           - fs/xfstests.py.data/ext2/test.yaml
           - fs/xfstests.py.data/ext4/test.yaml
           - fs/xfstests.py.data/xfs/test.yaml
+          - fs/xfstests.py.data/btrfs/test.yaml
 
     steps:
     - name: Check out repository code
