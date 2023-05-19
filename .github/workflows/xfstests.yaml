@@ -50,8 +50,9 @@ jobs:
         echo $HOME
         AVOCADO_PATH=$(dirname $(which avocado))
         echo "$AVOCADO_PATH" >> $GITHUB_PATH
+        sudo ln -s $AVOCADO_PATH /usr/local/bin/avocado
         # Include any other dependencies your tests might need
 
     - name: Run xfstests.py with Avocado
       run: |
-        sudo env "PATH=$PATH" avocado --show test run fs/xfstests.py --max-parallel-tasks 1 -m ${{ matrix.config }}
+        sudo avocado --show test run fs/xfstests.py --max-parallel-tasks 1 -m ${{ matrix.config }}
