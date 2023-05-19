@@ -52,9 +52,7 @@ jobs:
             dnf -y update && dnf -y groupinstall 'Development Tools' && dnf -y install python3 python3-pip which; \
           fi && \
           pip3 install avocado-framework && \
-          pip3 install avocado-framework-plugin-varianter-yaml-to-mux && \
-          AVOCADO_PATH=$(dirname $(which avocado)) && \
-          echo '$AVOCADO_PATH' >> $GITHUB_PATH \
+          pip3 install avocado-framework-plugin-varianter-yaml-to-mux \
           "
 
       - name: Run xfstests.py with Avocado
@@ -65,7 +63,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: "xfstests_${{matrix.config}}"
-          path: /root/avocado/job-results/
+          path: ./avocado-results/
 
       - name: "Publish results"
         continue-on-error: true
@@ -75,5 +73,5 @@ jobs:
           detailed_summary: true
           annotate_notice: true
           include_passed: true
-          report_paths: '/root/avocado/job-results/**/*.xml'
+          report_paths: './avocado-results/**/*.xml'
           github_token: ${{ secrets.GITHUB_TOKEN }}
