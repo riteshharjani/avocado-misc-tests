@@ -65,10 +65,16 @@ jobs:
         run: |
           docker exec avocado_test_container bash -c "cd /workspace && avocado --show test run fs/xfstests.py --max-parallel-tasks 1 -m ${{ matrix.config }}"
 
+      - name: Prepare artifact name
+        id: prepare
+        run: |
+          ARTIFACT_NAME=$(echo "${{ matrix.config }}" | tr '/' '_')
+          echo "ARTIFACT_NAME=$ARTIFACT_NAME" >> $GITHUB_ENV
+
       - name: Upload results
         uses: actions/upload-artifact@v3
         with:
-          name: "xfstests_${{ matrix.config }}"
+          name: "xfstests_${{ env.ARTIFACT_NAME }}"
           path: ./avocado-results/
 
       - name: "Publish results"
