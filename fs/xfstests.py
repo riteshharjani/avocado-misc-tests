@@ -522,7 +522,7 @@ class Xfstests(Test):
         # remove any previous losetup images & mounts
         process.system('umount %s %s' % (self.scratch_mnt, self.test_mnt),
                        sudo=True, ignore_status=True)
-        process.run('losetup -D')
+        process.system('losetup -D', sudo=True, ignore_status=True)
         # Creating [0 - num_loops) loop devices
         for i in range(self.num_loops):
             self._create_fsimages(loop_size, i)
