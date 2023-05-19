@@ -1,0 +1,41 @@
+name: xfstests
+
+on:
+  push:
+    branches:
+      - masterci
+    paths:
+      - 'fs/xfstests.py'
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        config:
+          - fs/xfstests.py.data/ext2/test.yaml
+          - fs/xfstests.py.data/ext4/test.yaml
+          - fs/xfstests.py.data/xfs/test.yaml
+
+    steps:
+    - name: Check out repository code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get -y upgrade
+        sudo apt-get install build-essential quota
+        pip install avocado-framework
+        pip install avocado-framework-plugin-varianter-yaml-to-mux
+        # Include any other dependencies your tests might need
+
+    - name: Run xfstests.py with Avocado
+      run: |
+        avocado --show test run fs/xfstests.py --max-parallel-tasks 1 -m ${{ matrix.config }}
