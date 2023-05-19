@@ -2,7 +2,7 @@ language: python
 
 matrix:
   allow_failures:
-        - python: "3.7" ## failing as recent changes in inspektor failed to install 
+        - python: "3.7" ## failing as recent changes in inspektor failed to install
 
 python:
     - "3.6"
@@ -10,7 +10,7 @@ python:
     - "3.8"
 branches:
     only:
-        - master
+        - masterci
 
 cache:
     directories:
@@ -48,7 +48,7 @@ script:
               echo "In the list"
               continue
             fi
-            done  
+            done
             # Test commit message size
             if [ $(echo "$msg" | wc -l) -ge 5 ]
             then
