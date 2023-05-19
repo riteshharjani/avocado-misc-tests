@@ -40,12 +40,16 @@ jobs:
         sudo apt-get update
         sudo apt-get -y upgrade
         sudo apt-get install build-essential quota
-        pip install avocado-framework
-        pip install avocado-framework-plugin-varianter-yaml-to-mux
+        pip3 install avocado-framework
+        pip3 install avocado-framework-plugin-varianter-yaml-to-mux
         echo 'export PATH=$PATH:~/.local/bin' >> ~/.bashrc
         source ~/.bashrc
+        which avocado
+        avocado --version
+        echo $USER
+        echo $HOME
         # Include any other dependencies your tests might need
 
     - name: Run xfstests.py with Avocado
       run: |
-        sudo avocado --show test run fs/xfstests.py --max-parallel-tasks 1 -m ${{ matrix.config }}
+        sudo bash -e 'avocado --show test run fs/xfstests.py --max-parallel-tasks 1 -m ${{ matrix.config }}'
