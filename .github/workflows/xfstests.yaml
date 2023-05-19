@@ -15,6 +15,12 @@ on:
       - '.github/workflows/xfstests*'
   workflow_dispatch:
 
+permissions:
+  contents: read
+  checks: write
+  id-token: write
+  pull-requests: write
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -39,7 +45,7 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get -y upgrade
-        sudo apt-get install build-essential quota
+        sudo apt-get install build-essential
         pip3 install avocado-framework
         pip3 install avocado-framework-plugin-varianter-yaml-to-mux
         AVOCADO_PATH=$(dirname $(which avocado))
@@ -49,3 +55,20 @@ jobs:
     - name: Run xfstests.py with Avocado
       run: |
         sudo env "PATH=$PATH" avocado --show test run fs/xfstests.py --max-parallel-tasks 1 -m ${{ matrix.config }}
+
+    - name: Upload results
+      uses: actions/upload-artifacts@v3
+      with:
+        name: "xfstests_${{matrix.config}}"
+        path: /root/avocado/job-results/
+
+    - name: "Publish results"
+      continue-on-error: true
+      uses: mikepenz/action-junit-report@v3
+      with:
+        commit: ${{ github.sha }}
+        detailed_summary: true
+        annotate_notice: true
+        include_passed: true
+        report_paths: '/root/avocado/job-results/**/*.xml'
+        github_token: ${{ secrets.GITHUB_TOKEN }}
