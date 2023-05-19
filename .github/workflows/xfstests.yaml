@@ -50,9 +50,9 @@ jobs:
 
     - name: Install dependencies
       run: |
-        sudo apt-get update
-        sudo apt-get -y upgrade
-        sudo apt-get install build-essential
+        apt-get update
+        apt-get -y upgrade
+        apt-get install build-essential
         pip3 install avocado-framework
         pip3 install avocado-framework-plugin-varianter-yaml-to-mux
         AVOCADO_PATH=$(dirname $(which avocado))
@@ -61,7 +61,7 @@ jobs:
 
     - name: Run xfstests.py with Avocado
       run: |
-        sudo env "PATH=$PATH" avocado --show test run fs/xfstests.py --max-parallel-tasks 1 -m ${{ matrix.config }}
+        avocado --show test run fs/xfstests.py --max-parallel-tasks 1 -m ${{ matrix.config }}
 
     - name: Upload results
       uses: actions/upload-artifact@v3
