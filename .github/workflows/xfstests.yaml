@@ -39,9 +39,15 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v2
 
+      - name: Create directories for the results
+        run: mkdir -p avocado-results
+
       - name: Docker Run
         run: |
-          docker run --privileged --name avocado_test_container -v $PWD/avocado-results:/root/avocado/job-results -d ${{ matrix.container }} sleep infinity
+            docker run --privileged -d --name avocado_test_container \
+                        -v ${{ github.workspace }}:/workspace \
+                        -v $PWD/avocado-results:/root/avocado/job-results \
+                        ${{ matrix.container }} sleep infinity
 
       - name: Install dependencies
         run: |
@@ -57,7 +63,7 @@ jobs:
 
       - name: Run xfstests.py with Avocado
         run: |
-          docker exec avocado_test_container avocado --show test run fs/xfstests.py --max-parallel-tasks 1 -m ${{ matrix.config }}
+          docker exec avocado_test_container bash -c "cd /workspace && avocado --show test run fs/xfstests.py --max-parallel-tasks 1 -m ${{ matrix.config }}"
 
       - name: Upload results
         uses: actions/upload-artifact@v3
