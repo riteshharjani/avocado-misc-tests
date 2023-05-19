@@ -11,6 +11,7 @@ on:
       - '**'
     paths:
       - 'fs/xfstests.py'
+      - '.github/workflows/xfstests*'
   workflow_dispatch:
 
 jobs:
