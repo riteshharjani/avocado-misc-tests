@@ -57,7 +57,7 @@ jobs:
         sudo env "PATH=$PATH" avocado --show test run fs/xfstests.py --max-parallel-tasks 1 -m ${{ matrix.config }}
 
     - name: Upload results
-      uses: actions/upload-artifacts@v3
+      uses: actions/upload-artifact@v3
       with:
         name: "xfstests_${{matrix.config}}"
         path: /root/avocado/job-results/
