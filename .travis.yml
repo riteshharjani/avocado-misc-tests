@@ -20,12 +20,15 @@ ignore:
   directories:
       - /home/travis/build/avocado-framework-tests/avocado-misc-tests/dlpar/
 
-sudo: false
+sudo: true
 
 install:
     - pip install -r requirements-travis.txt
     - pip install avocado-framework
     - pip install avocado-framework-plugin-varianter-yaml-to-mux
+    - sudo apt-get update
+    - sudo apt-get -y upgrade
+    - sudo apt-get -y install quota
 
 before_script:
   - export FS_CHANGE=$(git diff --name-only $TRAVIS_COMMIT_RANGE | grep "fs/xfstests.py") || true
