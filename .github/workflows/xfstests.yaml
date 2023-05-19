@@ -68,7 +68,7 @@ jobs:
       - name: Upload results
         uses: actions/upload-artifact@v3
         with:
-          name: "xfstests_${{ matrix.config }}".replace('/', '-')
+          name: "xfstests_${{ matrix.config }}"
           path: ./avocado-results/
 
       - name: "Publish results"
