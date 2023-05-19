@@ -24,11 +24,17 @@ sudo: false
 
 install:
     - pip install -r requirements-travis.txt
+    - pip install avocado-framework
+    - pip install avocado-framework-plugin-varianter-yaml-to-mux
+
+before_script:
+  - export FS_CHANGE=$(git diff --name-only $TRAVIS_COMMIT_RANGE | grep "fs/xfstests.py") || true
 
 script:
     - inspekt checkall --disable-lint W,R,C,E1002,E1101,E1103,E1120,F0401,I0011,E0203,E711,W605,E721 --no-license-check
     - inspekt indent
     - inspekt style
+    - if [ -n "$FS_CHANGE" ]; then avocado --show test run fs/xfstests.py --max-parallel-tasks 1 -m fs/xfstests.py.data/xfstests.yaml; fi
     - |
         error=""
         for COMMIT in $(git rev-list $TRAVIS_COMMIT_RANGE); do
