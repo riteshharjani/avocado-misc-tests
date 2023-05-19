@@ -50,14 +50,19 @@ jobs:
 
     - name: Install dependencies
       run: |
-        apt-get update
-        apt-get -y upgrade
-        apt-get install build-essential
+        if [[ "${{ matrix.container }}" == "ubuntu:latest" ]]; then
+          apt-get update
+          apt-get -y upgrade
+          apt-get install -y build-essential python3-pip
+        elif [[ "${{ matrix.container }}" == "fedora:latest" ]]; then
+          dnf update -y
+          dnf install -y @development-tools
+          dnf install -y python3-pip
+        fi
         pip3 install avocado-framework
         pip3 install avocado-framework-plugin-varianter-yaml-to-mux
         AVOCADO_PATH=$(dirname $(which avocado))
         echo "$AVOCADO_PATH" >> $GITHUB_PATH
-        # Include any other dependencies your tests might need
 
     - name: Run xfstests.py with Avocado
       run: |
