@@ -40,6 +40,8 @@ jobs:
         sudo apt-get install build-essential quota
         pip install avocado-framework
         pip install avocado-framework-plugin-varianter-yaml-to-mux
+        echo 'export PATH=$PATH:~/.local/bin' >> ~/.bashrc
+        source ~/.bashrc
         # Include any other dependencies your tests might need
 
     - name: Run xfstests.py with Avocado
