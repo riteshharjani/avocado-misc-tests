@@ -10,8 +10,8 @@ loop_type: !mux
     disk: "null"
 
 fs_type: !mux
-    fs_xfs_1k:
+    fs_xfs_4k:
         fs: 'xfs'
         args: '-R xunit generic/001'
-        mkfs_opt: '-f -b size=1024'
+        mkfs_opt: '-f -b size=4096'
         mount_opt: ''

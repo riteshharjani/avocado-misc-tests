@@ -10,8 +10,8 @@ loop_type: !mux
     disk: "null"
 
 fs_type: !mux
-    fs_ext4_1k:
+    fs_ext4_4k:
         fs: 'ext4'
         args: '-R xunit generic/001'
-        mkfs_opt: '-b 1024'
+        mkfs_opt: '-b 4096'
         mount_opt: '-o block_validity'
