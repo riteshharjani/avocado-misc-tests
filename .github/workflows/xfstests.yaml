@@ -52,4 +52,4 @@ jobs:
 
     - name: Run xfstests.py with Avocado
       run: |
-        sudo bash -e 'avocado --show test run fs/xfstests.py --max-parallel-tasks 1 -m ${{ matrix.config }}'
+        sudo -E avocado --show test run fs/xfstests.py --max-parallel-tasks 1 -m ${{ matrix.config }}
