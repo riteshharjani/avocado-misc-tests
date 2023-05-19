@@ -31,6 +31,13 @@ jobs:
           - fs/xfstests.py.data/ext4/test.yaml
           - fs/xfstests.py.data/xfs/test.yaml
           - fs/xfstests.py.data/btrfs/test.yaml
+        container:
+          - ubuntu:latest
+          - fedora:latest
+          # Add images for CentOS, RHEL, SLES, etc. here
+
+    container:
+      image: ${{ matrix.container }}
 
     steps:
     - name: Check out repository code
