@@ -15,3 +15,11 @@ fs_type: !mux
         args: '-R xunit generic/001'
         mkfs_opt: '-f -s 4096 -n 4096'
         mount_opt: ''
+run_type: !mux
+  upstream:
+    # run_type can either be "upstream" or "distro". When using upstream
+    # fsprgos are pulled and built from upstream URLs instead of distro releases.
+    run_type: 'upstream'
+    xfsprogs_url: 'https://git.kernel.org/pub/scm/fs/xfs/xfsprogs-dev.git'
+    e2fsprogs_url: 'https://git.kernel.org/pub/scm/fs/ext2/e2fsprogs.git'
+    btrfsprogs_url: 'https://git.kernel.org/pub/scm/linux/kernel/git/kdave/btrfs-progs.git'

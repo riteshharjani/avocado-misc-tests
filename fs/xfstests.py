@@ -154,6 +154,8 @@ class Xfstests(Test):
 
         packages = ['e2fsprogs', 'automake', 'gcc', 'quota', 'attr',
                     'make', 'xfsprogs', 'gawk', 'git']
+        if self.run_type == 'upstream':
+            packages.extend(['pkg-config'])
         if self.detected_distro.name in ['Ubuntu', 'debian']:
             packages.extend(
                 ['xfslibs-dev', 'uuid-dev', 'libuuid1',
@@ -219,6 +221,7 @@ class Xfstests(Test):
             self.use_dd = True
 
         self.dev_type = self.params.get('type', default='loop')
+        self.run_type = self.params.get('run_type', default='distro')
 
         self.__setUp_packages()
 
@@ -236,7 +239,6 @@ class Xfstests(Test):
             'scratch_mnt', default='/mnt/scratch')
         self.test_mnt = self.params.get('test_mnt', default='/mnt/test')
         self.disk_mnt = self.params.get('disk_mnt', default='/mnt/loop_device')
-        self.run_type = self.params.get('run_type', default='distro')
 
         self.devices = []
         self.part = None
