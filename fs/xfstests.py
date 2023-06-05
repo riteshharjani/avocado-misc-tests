@@ -274,24 +274,21 @@ class Xfstests(Test):
 
             if self.fs_to_test == "xfs":
                 if self.detected_distro.name in ['centos', 'fedora', 'rhel']:
-                    libini_path = process.run("ldconfig -p | grep libini",
-                                              verbose=True, ignore_status=True)
-                    if not libini_path:
-                        # Build libini.h as it is needed for xfsprogs
-                        libini_dir = os.path.join(self.teststmpdir, 'libini')
-                        if not os.path.exists(libini_dir):
-                            os.makedirs(libini_dir)
-                        git.get_repo('https://github.com/benhoyt/inih',
-                                     destination_dir=libini_dir)
-                        os.chdir(libini_dir)
-                        process.run("meson build", verbose=True)
-                        libini_build_dir = os.path.join(libini_dir, 'build')
-                        if os.path.exists(libini_build_dir):
-                            os.chdir(libini_build_dir)
-                            process.run("meson install", verbose=True)
-                        else:
-                            self.fail('Something went wrong while building \
-                                      libini. Please check the logs.')
+                    # Build libini.h as it is needed for xfsprogs
+                    libini_dir = os.path.join(self.teststmpdir, 'libini')
+                    if not os.path.exists(libini_dir):
+                        os.makedirs(libini_dir)
+                    git.get_repo('https://github.com/benhoyt/inih',
+                                 destination_dir=libini_dir)
+                    os.chdir(libini_dir)
+                    process.run("meson build", verbose=True)
+                    libini_build_dir = os.path.join(libini_dir, 'build')
+                    if os.path.exists(libini_build_dir):
+                        os.chdir(libini_build_dir)
+                        process.run("meson install", verbose=True)
+                    else:
+                        self.fail('Something went wrong while building \
+                                  libini. Please check the logs.')
                 # Build xfs progs
                 xfsprogs_dir = os.path.join(self.teststmpdir, 'xfsprogs')
                 if not os.path.exists(xfsprogs_dir):
