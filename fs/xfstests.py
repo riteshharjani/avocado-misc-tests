@@ -184,11 +184,11 @@ class Xfstests(Test):
                              'libblkid-devel', 'lzo-devel', 'zlib-devel',
                              'e2fsprogs-devel', 'asciidoc', 'xmlto',
                              'libzstd-devel', 'systemd-devel', 'meson',
-                             'gcc-c++'])
+                             'gcc-c++', 'python3-devel'])
 
             if self.detected_distro.name == 'SuSE':
                 packages.extend(['libbtrfs-devel', 'libcap-progs',
-                                'liburcu-devel', 'libinih-devel'])
+                                'liburcu-devel', 'libinih-devel', 'python3-devel'])
             else:
                 packages.extend(['btrfs-progs-devel', 'userspace-rcu-devel'])
 
