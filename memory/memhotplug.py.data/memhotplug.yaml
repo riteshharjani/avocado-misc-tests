@@ -1,5 +1,6 @@
 stress_tar_url = 'https://fossies.org/linux/privat/old/stress-1.0.5.tar.gz'
-iteration: 1
+stress_tar_url2 = 'https://fossies.org/linux/privat/old/stress-1.0.5.tar.gz'
+iteration: 2
 stresstime: 10
 vmcount: 4
 iocount: 4
