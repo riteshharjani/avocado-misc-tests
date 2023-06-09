@@ -3,14 +3,15 @@ name: xfstests
 on:
   push:
     branches:
-      - '**'
+      - 'xfstestsci**'
     paths:
       - 'fs/xfstests.py'
       - 'fs/xfstests.py.data/*/ci.yaml'
       - '.github/workflows/xfstests.yaml'
   pull_request:
     branches:
-      - '**'
+      - 'master'
+      - 'xfstestsci**'
     paths:
       - 'fs/xfstests.py'
       - 'fs/xfstests.py.data/*/ci.yaml'
